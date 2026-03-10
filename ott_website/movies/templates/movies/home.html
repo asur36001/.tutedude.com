@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Home - OTT Platform{% endblock %}
+
+{% block content %}
+<section>
+    <h2>Featured Movies</h2>
+    <div class="movie-grid">
+        {% for movie in featured_movies %}
+            <article class="movie-card">
+                {% if movie.poster %}
+                    <img src="{{ movie.poster.url }}" alt="{{ movie.title }} poster">
+                {% endif %}
+                <h3>{{ movie.title }}</h3>
+                <p>{{ movie.genre }} • {{ movie.release_year }}</p>
+                <a href="{% url 'movie_detail' movie.id %}">Watch Details</a>
+            </article>
+        {% empty %}
+            <p>No featured movies yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2>All Movies</h2>
+    <div class="movie-grid">
+        {% for movie in all_movies %}
+            <article class="movie-card">
+                {% if movie.poster %}
+                    <img src="{{ movie.poster.url }}" alt="{{ movie.title }} poster">
+                {% endif %}
+                <h3>{{ movie.title }}</h3>
+                <p>{{ movie.genre }} • {{ movie.duration_minutes }} mins</p>
+                <a href="{% url 'movie_detail' movie.id %}">View</a>
+            </article>
+        {% empty %}
+            <p>No movies uploaded yet. Use Upload Movie to add one.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

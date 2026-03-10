@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}{{ movie.title }} - OTT Platform{% endblock %}
+
+{% block content %}
+<article class="detail-card">
+    <h2>{{ movie.title }}</h2>
+    <p><strong>Genre:</strong> {{ movie.genre }}</p>
+    <p><strong>Release Year:</strong> {{ movie.release_year }}</p>
+    <p><strong>Duration:</strong> {{ movie.duration_minutes }} minutes</p>
+    <p>{{ movie.description }}</p>
+
+    {% if movie.poster %}
+        <img src="{{ movie.poster.url }}" alt="{{ movie.title }} poster" class="poster-large">
+    {% endif %}
+
+    <h3>Watch Movie</h3>
+    <video controls width="100%">
+        <source src="{{ movie.movie_file.url }}">
+        Your browser does not support video playback.
+    </video>
+</article>
+{% endblock %}
