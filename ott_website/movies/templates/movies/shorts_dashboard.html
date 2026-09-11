@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Shorts Analytics{% endblock %}
+
+{% block content %}
+<section class="dashboard-heading">
+    <div>
+        <p class="eyebrow">Creator analytics</p>
+        <h2>YouTube Shorts performance</h2>
+        <p>Track real audience metrics you enter or sync through YouTube's official APIs. This dashboard does not play videos or generate views.</p>
+    </div>
+    <a class="button-link" href="{% url 'shorts_analytics_api' %}">View JSON API</a>
+</section>
+
+<section class="metrics-grid" aria-label="Analytics summary">
+    <article class="metric-card"><span>Total views</span><strong>{{ total_views }}</strong></article>
+    <article class="metric-card"><span>Likes</span><strong>{{ total_likes }}</strong></article>
+    <article class="metric-card"><span>Comments</span><strong>{{ total_comments }}</strong></article>
+    <article class="metric-card"><span>Engagement rate</span><strong>{{ engagement_rate }}%</strong></article>
+</section>
+
+<section class="dashboard-grid">
+    <div class="form-section">
+        <p class="eyebrow">Add a Short</p>
+        <h3>Record current metrics</h3>
+        <form method="post" action="{% url 'add_short' %}" class="short-form">
+            {% csrf_token %}
+            <label>YouTube Short URL<input required type="url" name="youtube_url" placeholder="https://youtube.com/shorts/..." /></label>
+            <label>Title<input required type="text" name="title" maxlength="200" /></label>
+            <div class="form-row">
+                <label>Views<input min="0" type="number" name="views" value="0" /></label>
+                <label>Likes<input min="0" type="number" name="likes" value="0" /></label>
+            </div>
+            <div class="form-row">
+                <label>Comments<input min="0" type="number" name="comments" value="0" /></label>
+                <label>Avg. view duration (sec)<input min="0" type="number" name="average_view_duration_seconds" value="0" /></label>
+            </div>
+            <label>Published at (optional)<input type="datetime-local" name="published_at" /></label>
+            <button type="submit">Save analytics</button>
+        </form>
+    </div>
+
+    <div class="shorts-list">
+        <p class="eyebrow">Your Shorts</p>
+        <h3>Performance by video</h3>
+        {% for short in shorts %}
+            <article class="short-row">
+                <div><a href="{{ short.youtube_url }}" target="_blank" rel="noopener">{{ short.title }}</a><small>Last updated {{ short.last_synced_at|date:"M j, Y, H:i" }}</small></div>
+                <div class="short-stats"><span>{{ short.views }} views</span><span>{{ short.engagement_rate }}% engagement</span></div>
+            </article>
+        {% empty %}
+            <p class="empty-state">Add a Short to begin tracking its official analytics.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
